@@ -2,11 +2,6 @@
   <div class="home">
     <img alt="Vue logo" src="../assets/logo.png">
     <HelloWorld msg="Welcome to Your Vue.js App"/>
-    <!-- element 使用方法示范 详情见官网 -->
-    <el-row>
-      <el-button type="info" plain>信息按钮</el-button>
-      <el-button type="warning" plain>警告按钮</el-button>
-  </el-row>
 
   <!-- Vant 案例参考 -->
   <van-button type="danger">危险按钮</van-button>

@@ -7,8 +7,8 @@ Vue.use(VueRouter)
 const routes = [
   {
     path: '/',
-    name: 'home',
-    component: Home
+    name: 'mindex',
+    component: () => import('../views/Mindex.vue')
   },
   {
     path: '/about',
@@ -17,9 +17,9 @@ const routes = [
   }, 
   // 李立新路由
   {
-    path: '/mindex',
-    name: 'mindex',
-    component: () => import('../views/Mindex.vue')
+    path: '/home',
+    name: 'home',
+    component: Home
   }
 ]
 
