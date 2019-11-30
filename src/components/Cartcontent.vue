@@ -1,5 +1,5 @@
 <template>
-  <div class="cartcontent">
+  <div class="cartcontent">   
     <!-- 左边图片 -->
     <div class="cartcontent-left">
       <img src="../assets/logo.png" alt="">

@@ -20,6 +20,8 @@ import Store from '@/components/Store.vue'
 import Leftsidebar from '@/components/Leftsidebar.vue'
 import Cart from '@/components/Cart.vue'
 
+import { mapState,mapActions } from 'vuex'//引入可以接收 vuex方法 的方法 , ,mapGetters，mapMutations0
+
 export default {
   name: 'mindex',
   components: {
@@ -28,6 +30,36 @@ export default {
     Store,
     Leftsidebar,
     Cart
+  },
+  data(){
+    return {
+
+    }
+  },
+  methods:{ //定义方法
+    ...mapActions([ //获取 数据中心的方法
+      'getFoodSync'
+    ]),
+    ...mapActions([ //获取 数据中心的方法
+      'getTapSync'
+    ]),
+    ...mapActions([ //获取 数据中心的方法
+      'saveForm'
+    ])
+  },
+  computed:{ // 计算属性
+    ...mapState([ //获取数据
+      'food'
+    ])
+  },
+  created(){ // 生命周期函数
+    this.getFoodSync() //页面加载时获取数据
+    this.getTapSync() //标签
+  },
+  mounted(){
+    this.saveForm({
+      context:"tap"
+    })
   }
 }
 </script>

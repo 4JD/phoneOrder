@@ -20,6 +20,11 @@ const routes = [
     path: '/home',
     name: 'home',
     component: Home
+  },
+  {
+    path: '/Affirm',
+    name: 'Affirm',
+    component: () => import('../views/Affirm.vue')
   }
 ]
 

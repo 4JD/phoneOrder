@@ -5,7 +5,7 @@
     <van-nav-bar
       title="点餐"
       left-text="返回"
-      right-text="按钮"
+      right-text="我的订单"
       left-arrow
       @click-left="onClickLeft"
       @click-right="onClickRight"
@@ -48,6 +48,14 @@ export default {
   name: 'Store',
   props: {
 
+  },
+  methods:{
+    onClickLeft(){
+
+    },
+    onClickRight(){
+      
+    }
   }
 }
 </script>
