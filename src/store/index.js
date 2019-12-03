@@ -1,7 +1,11 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import http from '../utils/http'
+import vueAxios from 'vue-axios'
+// import axios from 'axios'
 
 Vue.use(Vuex)
+Vue.use(vueAxios, http)
 
 const food = [
   {
@@ -74,7 +78,9 @@ export default new Vuex.Store({
     food:[],
     foodType:[],
     cot:0,
-    tap:[]
+    tap:[],
+    storeID:1,
+    shopping:[]
   },
   getters:{//计算数据
 
@@ -84,7 +90,7 @@ export default new Vuex.Store({
       state.food = n
       console.log("获取了数据",state.food);
     },
-    getTap(state,t){ //获取数据
+    getTap(state,t){ //获取标签数据
       state.tap = t
       console.log("获取了数据",state.tap);
     },
@@ -109,30 +115,35 @@ export default new Vuex.Store({
         commit('getTap', tap)
       }, 1000)
     },
+
     // 获取后台数据 
-    saveForm (context) {
-      this.axios.post("/users/mindex",{context})
-      .then((res) => {
-        console.log("成功了",res.data)
-        if(res.data.state == "200") {
-          var token = res.data.token;
-          sessionStorage.setItem("token", token)
-
-          // 获取参数（未登录时想访问的路由）
-          var url = this.$route.query.redirect;
-
-          url = url ? url : "/Mindex"
-          // 切换路由
-          this.$router.replace(url)
-        } else {
-          console.log("登陆失败")
-        }
-      })
-      .catch(err=> {
-        console.log(err)
-      })
- }
-
+    // getFoodTap:function({commit}){ // 获取标签数据
+    //   console.log("执行了axios")
+    //   http
+    //   .post("food/foodList",{   
+    //     header:1
+    //   })
+    //   .then((res) => {
+    //     console.log("成功了",res.data)
+    //     commit("getTap",res.data)//标签数据赋值
+    //   })
+    //   .catch(err=> {
+    //     console.log("失败了",err)
+    //   })
+    // },
+  //   getFoodWhat:function({commit}){ //根据标签数据去获取菜品数据
+  //     http
+  //     .post("food/foodList",{
+  //       foodTypeId:1
+  //     })
+  //     .then((res) => {
+  //       console.log("成功了",res.data)
+  //       commit('getFood',res.data)
+  //     })
+  //     .catch(err=> {
+  //       console.log(err)
+  //     })             
+  //   }
   },
   modules: {
   }

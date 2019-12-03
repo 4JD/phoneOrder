@@ -44,8 +44,11 @@ export default {
       'getTapSync'
     ]),
     ...mapActions([ //获取 数据中心的方法
-      'saveForm'
-    ])
+      'getFoodTap'
+    ]),
+    ...mapActions([ //获取 标签下的数据 数据中心的方法
+      'getFoodWhat'
+    ]),
   },
   computed:{ // 计算属性
     ...mapState([ //获取数据
@@ -55,11 +58,12 @@ export default {
   created(){ // 生命周期函数
     this.getFoodSync() //页面加载时获取数据
     this.getTapSync() //标签
+    // this.getFoodTap() // 获取标签
+    this.getFoodWhat() //获取菜品
+
   },
   mounted(){
-    this.saveForm({
-      context:"tap"
-    })
+    
   }
 }
 </script>

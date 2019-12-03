@@ -64,7 +64,9 @@ export default {
   },
   methods: {
     showPopup() {
-      this.show = true;
+      if(this.cot>0){
+        this.show = true;
+      }
     },
     // 返回一个特定的 DOM 节点，作为挂载的父节点
     getContainer() {

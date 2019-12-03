@@ -50,13 +50,15 @@ export default {
       'newArr'
     ])
   },
-   methods:{
-    fn:function(index){
-      this.num = index
-      // 点击时获取属于标签的数据
-    }
-   }
-  
+  methods:{
+  fn:function(index){
+    this.num = index
+    // 点击时获取属于标签的数据
+  }
+  },
+  created(){
+
+ }
 }
 </script>
 

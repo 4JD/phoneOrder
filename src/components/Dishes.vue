@@ -33,6 +33,9 @@ export default {
   components: {
     ...mapState([
       'cot'
+    ]),
+    ...mapState([
+      'food'
     ])
   },
   methods:{
