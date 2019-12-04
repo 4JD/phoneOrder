@@ -1,21 +1,23 @@
 <template>
   <div class="dishes">
-    <!-- 左边图片 -->
-    <div class="dishes-left">
-      <img src="../assets/logo.png" alt="">
-    </div>
-    <!-- 右边商品名字 -->
-    <div class="dishes-right">
-      <h4>菜名</h4>
-      <p class="sales">销量：22</p>
-      <p class="price">
-        <span class="price1">￥18.00</span>
-        <span class="price2">
-          <button type="button" class="red" @click="red()" v-show="num>0">-</button>
-          <span class="price2-s" v-show="num>0">{{num}}</span>
-          <button type="button" class="add" @click="add()">+</button>
-        </span>
-      </p>
+    <div>
+      <!-- 左边图片 -->
+      <div class="dishes-left">
+        <img src="../assets/logo.png" alt="">
+      </div>
+      <!-- 右边商品名字 -->
+      <div class="dishes-right">
+        <h4>{{items.foodName}}</h4>
+        <p class="sales">{{items.foodRemark}}.</p>
+        <p class="price">
+          <span class="price1">￥{{items.foodPrice}}</span>
+          <span class="price2">
+            <button type="button" class="red" @click="red(items)" v-show="num>0">-</button>
+            <span class="price2-s" v-show="num>0">{{num}}</span>
+            <button type="button" class="add" @click="add(items)">+</button>
+          </span>
+        </p>
+      </div>
     </div>
   </div>
 </template>
@@ -25,30 +27,40 @@ import {mapState,mapMutations} from "vuex"
 
 export default {
   name: 'Dishes',
+  props:{
+    items:Object,
+  },
   data(){
     return{
-      num:0
+      num:0,
+      d:"无简介"
     }
   },
   components: {
     ...mapState([
       'cot'
-    ]),
-    ...mapState([
-      'food'
     ])
   },
   methods:{
     ...mapMutations([ //获取 数据中心的方法
       'alterCot'
     ]),
-    red:function(){ //减按钮
+    ...mapMutations([ //获取 数据中心的方法
+      'getShopping'
+    ]),
+    red:function(item){ //减按钮
       this.num --
-      this.alterCot(-1)
+      this.alterCot(-1) //计算总数
+      item.count = this.num
+      console.log("组件点击的商品",item)
+      this.getShopping(item)//得到购物车数组
     },
-    add:function(){ //加按钮
+    add:function(item){ //加按钮
       this.num ++
       this.alterCot(1)
+      item.count = this.num
+      console.log("组件点击的商品",item)
+      this.getShopping(item)
     }
   }
 }

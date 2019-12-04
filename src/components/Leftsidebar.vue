@@ -3,19 +3,21 @@
     <!-- 点餐左边 -->
     <div class="tab-title">
       <!-- <a href="javascript:;" @click="num = 1" :class="{'tab-title-l': num==1}">选项1</a> -->
-      <a href="javascript:;" @click="fn(index)" :class="{'tab-title-l': num==index}" v-for="(item,index) in tap" :key="index">{{item.text}}</a>
+      <a href="javascript:;" @click="fn(index,item)" :class="{'tab-title-l': num==index}" v-for="(item,index) in tap" :key="index">{{item.foodTypeName}}</a>
 
     </div>
 
-    <p class="food-title">选项{{num+1}}内容</p>
+    <p class="food-title">{{title}}</p>
     <!-- 点餐右边 -->
     <div class="tab-content">
       <div v-show="num == index" v-for="(item,index) in tap" :key="index">
         {{item.tex}}
-        <Dishes></Dishes>
+
+        <keep-alive>
+          <Dishes v-for="(item2,index2) in food" :key="index2" :items="item2"></Dishes>
+        </keep-alive>
       </div>
     </div>
-
   </div>
 </template>
 
@@ -24,7 +26,7 @@ import Vue from 'vue';
 import { TreeSelect } from 'vant';
 import Dishes from '@/components/Dishes.vue'
 
-import { mapState } from 'vuex'//,mapGetters
+import { mapState,mapActions } from 'vuex'//,mapGetters
 
 Vue.use(TreeSelect);
 
@@ -32,9 +34,10 @@ export default {
   name: 'Leftsidebar',
   data() {
     return {
-      num:1,
+      num:0,
       activeIndex: 0,
-      items: []
+      items: [],
+      title:""
     }
   },
   components: {
@@ -51,10 +54,17 @@ export default {
     ])
   },
   methods:{
-  fn:function(index){
-    this.num = index
-    // 点击时获取属于标签的数据
-  }
+    ...mapActions([ //获取 标签下的数据 数据中心的方法
+      'getFoodWhat'
+    ]),
+    fn:function(index,item){
+      this.num = index
+      
+      this.title = item.foodTypeName //右边标题
+      console.log("菜品id",item.foodTypeId)
+      // 点击时获取属于标签的数据
+      this.getFoodWhat(item.foodTypeId) //获取菜品
+    }
   },
   created(){
 

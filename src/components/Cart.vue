@@ -11,13 +11,12 @@
           <div class="cart-bottom-l-3" v-if="cot>0">{{cot}}</div>
         </div>
         <!-- 价格 -->
-        <span class="cart-bottom-c">商品价格</span>
+        <span class="cart-bottom-c">{{totalPrice}}</span>
       </van-cell>
       <!-- 右边按钮 -->
       <div class="cart-btn">
-        <button class="pay" type="button" :disabled="cot>0?true:false" :class="{'pay1': cot>0}">{{cot>0 ? text1:text}}</button>
+        <button class="pay" type="button" :disabled="cot>0 ?false :true" @click="createOrder" :class="{'pay1': cot>0}">{{cot>0 ? text1:text}}</button>
       </div>
-     
       <!-- 弹出层 -->
       <van-popup v-model="show" 
         position="bottom" 
@@ -26,9 +25,11 @@
         <!-- 购物车内容 -->
         <div class="title">
           <span>已选商品</span>
-          <a href=""><van-icon name="delete" /> 清空</a>
+          <a href="javascript:;" @click="empty"><van-icon name="delete" /> 清空</a>
         </div>
-        <Cartcontent></Cartcontent>
+        <Cartcontent v-for="(item,index) in shopping" :key="index" :items="item"></Cartcontent>
+
+        <div class="bomm">到底了</div>
         </van-popup>
     </div>
   </div>
@@ -40,7 +41,7 @@ import { Icon } from 'vant';
 import { Popup } from 'vant';
 import Cartcontent from '@/components/Cartcontent.vue'
 
-import {mapState} from "vuex"
+import {mapState,mapActions, mapGetters} from "vuex"
 
 
 Vue.use(Popup);
@@ -60,6 +61,12 @@ export default {
   computed:{
     ...mapState([
       'cot'
+    ]),
+    ...mapState([
+      'shopping'
+    ]),
+    ...mapGetters([ //总价
+      'totalPrice'
     ])
   },
   methods: {
@@ -71,6 +78,17 @@ export default {
     // 返回一个特定的 DOM 节点，作为挂载的父节点
     getContainer() {
       return document.querySelector('.cart');
+    },
+    ...mapActions([ //获取生成订单函数
+      'generateOrder'
+    ]),
+    createOrder:function(){ //生成订单函数
+      console.log("点击了支付");
+      this.generateOrder()
+      this.$router.replace('/Affirm')
+    },
+    empty:function(){ //清空函数
+      location.reload() // 重新刷新页面
     }
   }
 }
@@ -144,6 +162,9 @@ export default {
       top: 10px;
       left: 100px;
       color: rgb(167, 129, 129);
+    }
+    .bomm{
+      height: 150px;
     }
   }
 </style>

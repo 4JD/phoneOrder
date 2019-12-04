@@ -25,6 +25,16 @@ const routes = [
     path: '/Affirm',
     name: 'Affirm',
     component: () => import('../views/Affirm.vue')
+  },
+  {
+    path: '/PayShow',
+    name: 'PayShow',
+    component: () => import('../components/PayShow.vue')
+  },
+  {
+    path: '/PayWin',
+    name: 'PayWin',
+    component: () => import('../views/PayWin.vue')
   }
 ]
 

@@ -6,13 +6,13 @@
     </div>
     <!-- 右边商品名字 -->
     <div class="cartcontent-right">
-      <h3>菜名</h3>
+      <h3>{{items.foodName}}</h3>
       <p class="price">
-        <span class="price1">￥18.00</span>
+        <span class="price1">￥{{items.foodPrice}}</span>
         <span class="price2">
-          <button type="button" class="red">-</button>
-          <span class="price2-s">10</span>
-          <button type="button" class="add">+</button>
+          <button type="button" class="red" @click="reviseNum(-1,items.foodId)">-</button>
+          <span class="price2-s">{{items.count}}</span>
+          <button type="button" class="add" @click="reviseNum(1,items.foodId)">+</button>
         </span>
       </p>
     </div>
@@ -20,11 +20,31 @@
 </template>
 
 <script>
+// import {mapState} from "vuex"
+import {mapMutations} from "vuex"
 
 export default {
   name: 'cartcontent',
+  props:{
+    items:Object,
+  },
   components: {
 
+  },
+  methods:{
+    ...mapMutations([
+      'addShoppingNum',
+      'reduceShoppingNum'
+    ]),
+    reviseNum(n,id){
+      console.log("当前数量改变的菜品id",id)
+      if(n==-1){
+        this.reduceShoppingNum(id)
+      }
+      if(n==1){
+        this.addShoppingNum(id)
+      }
+    }
   }
 }
 </script>

@@ -1,95 +1,19 @@
 <template>
   <div class="indent">
     <h5>订单详情</h5>
-    <p class="content">
-      <img src="../assets/logo.png" alt="">
-      <span class="content-tow">特别长的菜名很长很</span>
-      <span>x2</span>
-      <span class="content-three">￥88</span>
+    <p class="ddxq">桌号：{{deskNum}}</p>
+    <p class="ddxq">订单时间：{{new Date().toLocaleString()}}</p>
+    <p class="ddxq">订单编号：{{orderNum}}</p>
+
+    <p class="ddxq ddxq-last">
+      <van-count-down :time="time"/>
     </p>
-    <p class="content">
+
+    <p class="content" v-for="(item,index) in shopping" :key="index">
       <img src="../assets/logo.png" alt="">
-      <span class="content-tow">特别长的菜名很ddddddddddddddd长很</span>
-      <span>x2</span>
-      <span class="content-three">￥88</span>
-    </p>
-    <p class="content">
-      <img src="../assets/logo.png" alt="">
-      <span class="content-tow">特别长的菜名很长很</span>
-      <span>x2</span>
-      <span class="content-three">￥88</span>
-    </p>
-    <p class="content">
-      <img src="../assets/logo.png" alt="">
-      <span class="content-tow">特别长的菜名很长很</span>
-      <span>x2</span>
-      <span class="content-three">￥88</span>
-    </p>
-    <p class="content">
-      <img src="../assets/logo.png" alt="">
-      <span class="content-tow">特别长的菜名很长很</span>
-      <span>x2</span>
-      <span class="content-three">￥88</span>
-    </p>
-    <p class="content">
-      <img src="../assets/logo.png" alt="">
-      <span class="content-tow">特别长的菜名很长很</span>
-      <span>x2</span>
-      <span class="content-three">￥88</span>
-    </p>
-    <p class="content">
-      <img src="../assets/logo.png" alt="">
-      <span class="content-tow">特别长的菜名很长很</span>
-      <span>x2</span>
-      <span class="content-three">￥88</span>
-    </p>
-    <p class="content">
-      <img src="../assets/logo.png" alt="">
-      <span class="content-tow">特别长的菜名很长很</span>
-      <span>x2</span>
-      <span class="content-three">￥88</span>
-    </p>
-    <p class="content">
-      <img src="../assets/logo.png" alt="">
-      <span class="content-tow">特别长的菜名很长很</span>
-      <span>x2</span>
-      <span class="content-three">￥88</span>
-    </p>
-    <p class="content">
-      <img src="../assets/logo.png" alt="">
-      <span class="content-tow">特别长的菜名很长很</span>
-      <span>x2</span>
-      <span class="content-three">￥88</span>
-    </p>
-    <p class="content">
-      <img src="../assets/logo.png" alt="">
-      <span class="content-tow">特别长的菜名很长很</span>
-      <span>x2</span>
-      <span class="content-three">￥88</span>
-    </p>
-    <p class="content">
-      <img src="../assets/logo.png" alt="">
-      <span class="content-tow">特别长的菜名很长很</span>
-      <span>x2</span>
-      <span class="content-three">￥88</span>
-    </p>
-    <p class="content">
-      <img src="../assets/logo.png" alt="">
-      <span class="content-tow">特别长的菜名很长很</span>
-      <span>x2</span>
-      <span class="content-three">￥88</span>
-    </p>
-    <p class="content">
-      <img src="../assets/logo.png" alt="">
-      <span class="content-tow">特别长的菜名很长很</span>
-      <span>x2</span>
-      <span class="content-three">￥88</span>
-    </p>
-    <p class="content">
-      <img src="../assets/logo.png" alt="">
-      <span class="content-tow">特别长的菜名很长很</span>
-      <span>x2</span>
-      <span class="content-three">￥88</span>
+      <span class="content-tow">{{item.foodName}}</span>
+      <span>x{{item.count}}</span>
+      <span class="content-three">￥{{item.count*item.foodPrice}}</span>
     </p>
 
     <!-- 备注 -->
@@ -106,6 +30,9 @@
           show-word-limit
         />
       </van-cell-group>
+
+      <!-- 支付宝接口 -->
+       <PayShow></PayShow>
     </div>
     <div class="perch">
 
@@ -114,9 +41,9 @@
     <!-- 底部支付 -->
     <div class="bottom">
       <span>
-        ￥103.34
+        ￥{{orderPrice}}
       </span>
-      <button type="button" class="btn">待支付</button>
+      <button type="button" class="btn" @click="pay">待支付</button>
     </div>
   </div>
 </template>
@@ -124,18 +51,43 @@
 <script>
 import Vue from 'vue';
 import { Field } from 'vant';
+import { CountDown } from 'vant';
 
+Vue.use(CountDown);
 Vue.use(Field);
+
+import { mapState,mapActions} from 'vuex'
 
 export default {
   name: 'Indent',
   components: {
-
   },
   data(){
     return {
-      message:""
+      message:"",
+      time: 15 * 60 * 1000
     }
+  },
+  computed:{ // 计算属性
+    ...mapState([ //获取数据
+      'orderPrice',//价格
+      'deskNum',//桌号
+      'orderTime', //订单时间
+      'orderNum', //订单编号
+      'str',
+      'shopping' //订单数组
+    ])
+  },
+  methods:{
+    ...mapActions([
+      'paymentOrder'
+    ]),
+
+  pay(){
+    console.log("支付函数被调用");
+    var name1 = "123"
+    this.paymentOrder(this.orderNum,name1,this.orderPrice,this.message);
+  }
   }
 }
 </script>
@@ -147,6 +99,12 @@ export default {
     h5{
       padding: 5px;
       box-shadow: 0 1px 1px #666;
+    }
+    .ddxq{ // 订单支付详情
+      font-size: 15px
+    }
+    .ddxq-last{
+      border-bottom: #666 1px solid;
     }
     p:nth-last-child {
       background: forestgreen;

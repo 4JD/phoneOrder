@@ -5,7 +5,9 @@
     <!-- 返回组件 -->
     <Store></Store>
     <!-- 左边导航组件 和菜品 -->
-    <Leftsidebar></Leftsidebar>
+    <keep-alive>
+      <Leftsidebar></Leftsidebar>
+    </keep-alive>
     <!-- 购物车 -->
     <div class="cart">
     <Cart></Cart>
@@ -38,12 +40,6 @@ export default {
   },
   methods:{ //定义方法
     ...mapActions([ //获取 数据中心的方法
-      'getFoodSync'
-    ]),
-    ...mapActions([ //获取 数据中心的方法
-      'getTapSync'
-    ]),
-    ...mapActions([ //获取 数据中心的方法
       'getFoodTap'
     ]),
     ...mapActions([ //获取 标签下的数据 数据中心的方法
@@ -56,11 +52,8 @@ export default {
     ])
   },
   created(){ // 生命周期函数
-    this.getFoodSync() //页面加载时获取数据
-    this.getTapSync() //标签
-    // this.getFoodTap() // 获取标签
-    this.getFoodWhat() //获取菜品
-
+    this.getFoodTap() // 获取标签
+    this.getFoodWhat(2) //获取菜品
   },
   mounted(){
     
