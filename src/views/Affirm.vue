@@ -1,7 +1,7 @@
 <template>
   <div class="affirm">
     <!-- 状态栏 -->
-    <Status></Status>
+    <!-- <Status></Status> -->
     <!-- 返回 -->
     <van-nav-bar
       title="确认订单"
@@ -22,7 +22,7 @@
 // import HelloWorld from '@/components/HelloWorld.vue'
 import Vue from 'vue';
 import { NavBar } from 'vant';
-import Status from '@/components/Status.vue'
+// import Status from '@/components/Status.vue'
 import Indent from '@/components/Indent.vue'
 
 Vue.use(NavBar);
@@ -32,13 +32,12 @@ export default {
   name: 'Affirm',
   components: {
     // HelloWorld
-    Status,
+    // Status,
     Indent
   },
   computed:{ // 计算属性
     ...mapState([ //获取数据
       'orderNum'
-  
     ])
   },
   methods:{ //定义方法
@@ -46,7 +45,10 @@ export default {
       'cancelOrder'
     ]),
     onClickLeft:function(){ //取消订单
-      this.cancelOrder(this.orderNum)
+      console.log("取消订单")
+      var dd = String(this.orderNum)
+      console.log(dd)
+      this.cancelOrder(dd)
       this.$router.replace('/')
     }
   }

@@ -2,7 +2,7 @@
   <div class="cartcontent">   
     <!-- 左边图片 -->
     <div class="cartcontent-left">
-      <img src="../assets/logo.png" alt="">
+      <img :src="items.foodPhoto" alt="">
     </div>
     <!-- 右边商品名字 -->
     <div class="cartcontent-right">
@@ -10,9 +10,9 @@
       <p class="price">
         <span class="price1">￥{{items.foodPrice}}</span>
         <span class="price2">
-          <button type="button" class="red" @click="reviseNum(-1,items.foodId)">-</button>
-          <span class="price2-s">{{items.count}}</span>
-          <button type="button" class="add" @click="reviseNum(1,items.foodId)">+</button>
+          <button type="button" class="red" @click="red(items)" v-show="items.foodNum>0">-</button>
+            <span class="price2-s" v-show="items.foodNum>0">{{items.foodNum}}</span>
+          <button type="button" class="add" @click="add(items)">+</button>
         </span>
       </p>
     </div>
@@ -25,6 +25,11 @@ import {mapMutations} from "vuex"
 
 export default {
   name: 'cartcontent',
+  data(){
+    return {
+      num:0,
+    }
+  },
   props:{
     items:Object,
   },
@@ -34,17 +39,30 @@ export default {
   methods:{
     ...mapMutations([
       'addShoppingNum',
-      'reduceShoppingNum'
+      'reduceShoppingNum',
+      'alterCot'
     ]),
-    reviseNum(n,id){
-      console.log("当前数量改变的菜品id",id)
-      if(n==-1){
-        this.reduceShoppingNum(id)
-      }
-      if(n==1){
-        this.addShoppingNum(id)
-      }
+    ...mapMutations([ //获取 数据中心的方法
+      'getShopping',
+      'redShopping'
+    ]),
+    red:function(item){ //减按钮
+      this.num --
+      this.alterCot(-1) //计算总数
+
+      console.log("组件点击的商品",item)
+      this.redShopping(item)//得到购物车数组
+    },
+    add:function(item){ //加按钮
+      this.num ++
+      this.alterCot(1)
+
+      console.log("组件点击的商品",item)
+      this.getShopping1(item)
     }
+  },
+  created(){
+    this.num = this.items.count
   }
 }
 </script>

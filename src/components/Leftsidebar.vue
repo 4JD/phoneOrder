@@ -11,11 +11,12 @@
     <!-- 点餐右边 -->
     <div class="tab-content">
       <div v-show="num == index" v-for="(item,index) in tap" :key="index">
-        {{item.tex}}
+        {{item.tex}} 
 
-        <keep-alive>
           <Dishes v-for="(item2,index2) in food" :key="index2" :items="item2"></Dishes>
-        </keep-alive>
+
+          
+      <p>没有更多了</p>
       </div>
     </div>
   </div>

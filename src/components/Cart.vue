@@ -8,7 +8,7 @@
         <!-- 购物车图标 -->
         <div class="cart-bottom-l" :class="{'cart-bottom-l-2': cot>0}">
           <van-icon name="cart-o" />
-          <div class="cart-bottom-l-3" v-if="cot>0">{{cot}}</div>
+          <div class="cart-bottom-l-3" v-if="cot>0">{{countSum}}</div>
         </div>
         <!-- 价格 -->
         <span class="cart-bottom-c">{{totalPrice}}</span>
@@ -67,6 +67,9 @@ export default {
     ]),
     ...mapGetters([ //总价
       'totalPrice'
+    ]),
+    ...mapGetters([ //总数
+      'countSum'
     ])
   },
   methods: {
@@ -83,8 +86,9 @@ export default {
       'generateOrder'
     ]),
     createOrder:function(){ //生成订单函数
-      console.log("点击了支付");
-      this.generateOrder()
+      var shopping=JSON.stringify(this.shopping) //处理为json字符串
+      shopping = JSON.parse(shopping) //处理为json数组
+      this.generateOrder(shopping)
       this.$router.replace('/Affirm')
     },
     empty:function(){ //清空函数
@@ -145,15 +149,19 @@ export default {
     .cart-btn{
       position: absolute;
       right: 10px;
-      top: 10px;
+      top: 15px;
+      border-radius: 5px;
       .pay{
         width: 120px;
         height: 40px;
+        line-height: 40px;
         background: #777;
         border: none;
+        border-radius: 5px
       }
       .pay1{
-        background: rgb(41, 184, 65);
+        line-height: 40px;
+        background: #5de05d;
         color: white;
       }
     }

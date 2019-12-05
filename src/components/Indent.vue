@@ -10,10 +10,10 @@
     </p>
 
     <p class="content" v-for="(item,index) in shopping" :key="index">
-      <img src="../assets/logo.png" alt="">
+      <img :src="item.foodPhoto" alt="">
       <span class="content-tow">{{item.foodName}}</span>
-      <span>x{{item.count}}</span>
-      <span class="content-three">￥{{item.count*item.foodPrice}}</span>
+      <span>x{{item.foodNum}}</span>
+      <span class="content-three">￥{{item.foodNum*item.foodPrice}}</span>
     </p>
 
     <!-- 备注 -->
@@ -35,12 +35,10 @@
        <PayShow></PayShow>
     </div>
     <div class="perch">
-
     </div>
-
     <!-- 底部支付 -->
     <div class="bottom">
-      <span>
+      <span class="pre">
         ￥{{orderPrice}}
       </span>
       <button type="button" class="btn" @click="pay">待支付</button>
@@ -85,8 +83,12 @@ export default {
 
   pay(){
     console.log("支付函数被调用");
-    var name1 = "123"
-    this.paymentOrder(this.orderNum,name1,this.orderPrice,this.message);
+    // var name1 = "123"
+    var obj = {}
+      obj.orderNum = this.orderNum,
+      obj.orderPrice = this.orderPrice
+    
+    this.paymentOrder(obj);//,name1,,this.message
   }
   }
 }
@@ -144,10 +146,10 @@ export default {
     // 底部支付
     .bottom {
       width: 100%;
-      height: 60px;
+      height: 80px;
       line-height: 60px;
       color: white;
-      background: #666;
+      background: #363434;
       position: fixed;
       bottom: 0;
       left: 0;
@@ -155,6 +157,11 @@ export default {
       display: flex;
       justify-content: space-around;
       align-items:center;
+      .pre{
+        padding-right: 200px;
+        line-height: 40px;
+        font-size: 30px
+      }
       .btn{
         width: 120px;
         height: 40px;
@@ -162,6 +169,9 @@ export default {
         line-height: 40px;
         border: none;
         border-radius: 5px;
+        position: absolute;
+        right: 10px;
+        top: 15px;
       }
     }
     .perch{

@@ -1,13 +1,11 @@
 <template>
   <div class="shop-content">
     <!-- 状态栏组件 -->
-    <Status></Status>
+    <!-- <Status></Status> -->
     <!-- 返回组件 -->
     <Store></Store>
     <!-- 左边导航组件 和菜品 -->
-    <keep-alive>
-      <Leftsidebar></Leftsidebar>
-    </keep-alive>
+    <Leftsidebar></Leftsidebar>
     <!-- 购物车 -->
     <div class="cart">
     <Cart></Cart>
@@ -17,7 +15,7 @@
 
 <script>
 // import HelloWorld from '@/components/HelloWorld.vue'
-import Status from '@/components/Status.vue'
+// import Status from '@/components/Status.vue'
 import Store from '@/components/Store.vue'
 import Leftsidebar from '@/components/Leftsidebar.vue'
 import Cart from '@/components/Cart.vue'
@@ -28,7 +26,7 @@ export default {
   name: 'mindex',
   components: {
     // HelloWorld
-    Status,
+    // Status,
     Store,
     Leftsidebar,
     Cart
@@ -53,7 +51,7 @@ export default {
   },
   created(){ // 生命周期函数
     this.getFoodTap() // 获取标签
-    this.getFoodWhat(2) //获取菜品
+    this.getFoodWhat(5) //获取菜品
   },
   mounted(){
     

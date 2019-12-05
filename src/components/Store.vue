@@ -12,19 +12,14 @@
     <!-- 餐厅的信息 -->
     <div class="info">
       <div class="info-left">
-        <van-image
-          round
-          width="80px"
-          height="80px"
-          src="../assets/logo.png"
-        />
+        <img src="../assets/timg.jpg" alt="">
       </div>
       <div class="info-right">
-        <p>商家名</p>
+        <p>大米先生</p>
         <!-- 通知 -->
         <p>
           <van-notice-bar
-            text="商家公告公告公告商家公告公告公告商家公告公告公告商家公告公告公告商家公告公告公告"
+            text="欢迎来到本店，本店支持在线点餐、下单后请耐心等待"
             left-icon="volume-o"
           />
         </p>
@@ -68,6 +63,12 @@ export default {
     .info-left,
     .info-right{
       float: left;
+    }
+    .info-left{
+      img{
+        width: 80px;
+        height: 80px;
+      }
     }
     .info-right{
       padding-left: 10px;

@@ -3,12 +3,12 @@
     <div>
       <!-- 左边图片 -->
       <div class="dishes-left">
-        <img src="../assets/logo.png" alt="">
+        <img :src="items.foodPhoto" alt="">
       </div>
       <!-- 右边商品名字 -->
       <div class="dishes-right">
         <h4>{{items.foodName}}</h4>
-        <p class="sales">{{items.foodRemark}}.</p>
+        <p class="sales">{{items.foodRemark.substr(0,8)}}...</p>
         <p class="price">
           <span class="price1">￥{{items.foodPrice}}</span>
           <span class="price2">
@@ -23,20 +23,26 @@
 </template>
 
 <script>
-import {mapState,mapMutations} from "vuex"
+import {mapState,mapMutations} from "vuex"//,mapGetters
 
 export default {
   name: 'Dishes',
   props:{
     items:Object,
   },
+  components: {
+
+  },
   data(){
     return{
       num:0,
-      d:"无简介"
+      d:"无简介",
     }
   },
-  components: {
+  computed:{
+    // getCount:function(){
+    //   return this.coun =this.items.count
+    // },  
     ...mapState([
       'cot'
     ])
@@ -46,19 +52,19 @@ export default {
       'alterCot'
     ]),
     ...mapMutations([ //获取 数据中心的方法
-      'getShopping'
+      'getShopping',
+      'redShopping'
     ]),
     red:function(item){ //减按钮
       this.num --
       this.alterCot(-1) //计算总数
-      item.count = this.num
+
       console.log("组件点击的商品",item)
-      this.getShopping(item)//得到购物车数组
+      this.redShopping(item)//得到购物车数组
     },
     add:function(item){ //加按钮
       this.num ++
       this.alterCot(1)
-      item.count = this.num
       console.log("组件点击的商品",item)
       this.getShopping(item)
     }

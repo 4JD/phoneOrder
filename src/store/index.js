@@ -21,16 +21,32 @@ export default new Vuex.Store({
     orderNum:0, //订单编号
     orderTime:"", //订单时间
     str:"" ,//支付字符串
-    zong:0
+    zong:0,
+    wg:[]
   },
   getters:{//计算数据
     // 计算购物车总价
     totalPrice(state){
-      state.shopping.forEach(function(item){
-        state.zong = item.count * item.foodPrice + state.zong
-      })
-      return state.zong;
-    }
+      var n = 0
+      for(var i=0; i<state.shopping.length;i++){
+        n = state.shopping[i].foodNum*state.shopping[i].foodPrice + n
+        console.log("执行了计算总价")
+      }
+      console.log("总价为",n);
+      return n
+    },
+    // 计算总数
+    countSum(state){
+      var num = 0
+      for(var i=0; i<state.shopping.length;i++){
+        num = state.shopping[i].foodNum + num
+      }
+      return num
+    },
+    // 计算单件商品数量
+    getCount(state,n){
+      return state.shopping[n].foodNum
+    } 
   },
   mutations: {//在这里定义修改数据的方案
     getFood(state,n){ //获取数据
@@ -55,30 +71,46 @@ export default new Vuex.Store({
         // console.log("减了",state.cot);
       }
     },
-    getShopping(state,itemm){
-      console.log("数据中心数据",state)
-      console.log("参数点击的商品",itemm)
+    getShopping(state,itemm){ //将商品加入购物车数组
+      // console.log("数据中心数据",state)
+      console.log("传过来的参数",itemm)
+      console.log("一开始的数组",state.shopping)
       if(state.shopping.indexOf(itemm)==-1){
+        itemm.foodNum = 1
         state.shopping.push(itemm);
-      } 
-      console.log("更新后的数组",state.shopping)
-      
-    },
-    addShoppingNum(state,id){ // 增加购物车数量
-      state.shopping.forEach(function(item){
-        if(item.foodId==id){
-          item.count++
+        console.log("刚加入数组",state.shopping) 
+      } else {
+        for(var i=0; i<state.shopping.length; i++){
+          if(state.shopping[i].foodId == itemm.foodId){
+            state.shopping[i].foodNum = state.shopping[i].foodNum +1
+            break;
+          }
         }
-      });
-      console.log("增加后的购物车数组",state.shopping)
+      }
+      console.log("更新后的数组",state.shopping) 
     },
-    reduceShoppingNum(state,id){ // 减少购物车数量
-      state.shopping.forEach(function(item){
-        if(item.foodId==id){
-          item.count--
+    redShopping(state,itemm){ //将商品数量减少
+      // console.log("数据中心数据",state)
+      console.log("传过来的参数",itemm)
+      for(var i=0; i<state.shopping.length; i++){
+        if(state.shopping[i].foodId==itemm.foodId){
+          state.shopping[i].foodNum --
         }
-      });
-      console.log("减少后的购物车数组",state.shopping)
+        if(state.shopping[i].foodNum==0){
+          state.shopping.splice(i,1);
+          break;
+        }
+      }
+      console.log("更新后的数组",state.shopping) 
+    },
+    getShopping1(state,itemm){ //将购物车商品怎加
+      for(var i=0; i<state.shopping;i++){
+        if(state.shopping[i].foodId==itemm.foodId){
+          state.shopping[i].foodNum++
+          break;
+        }
+      }
+      console.log("更新后的数组",state.shopping) 
     },
     getstr(state,str){ // 支付宝接口
       state.str =str
@@ -89,7 +121,7 @@ export default new Vuex.Store({
     getFoodTap:function({commit}){ // 获取标签数据
       http
       .post("foodType/foodTypeList",{   
-        "storeId":"1"
+        "storeId":"12"
       })
       .then((res) => {
         console.log("菜品标签获取成功了",res.data.data)
@@ -105,28 +137,38 @@ export default new Vuex.Store({
         "foodTypeId":`${i}`
       })
       .then((res) => {
-        console.log("菜品获取成功了",res.data.data)
-        commit('getFood',res.data.data)
+        console.log("菜品列表url",res.data.data.url);
+        console.log("菜品列表s",res.data.data.foods);
+        const newFoodList = [];
+        for(var i=0;i<res.data.data.foods.length;i++) {
+          var a = {
+            foodId: res.data.data.foods[i].foodId,
+            foodName: res.data.data.foods[i].foodName,
+            foodPhoto: res.data.data.url + res.data.data.foods[i].foodPhoto,
+            foodPrice: res.data.data.foods[i].foodPrice,
+            foodRemark: res.data.data.foods[i].foodRemark,
+            foodState: res.data.data.foods[i].foodState,
+            foodTypeId: res.data.data.foods[i].foodTypeId,
+            foodTypeName: res.data.data.foods[i].foodTypeName,
+            saleId: res.data.data.foods[i].saleId,
+            saleState: res.data.data.foods[i].saleState,
+            tasteId: res.data.data.foods[i].tasteId
+          }
+          newFoodList.push(a);
+        }
+        commit('getFood',newFoodList)
       })
       .catch(err=> {
         console.log(err)
       })             
     },
-    generateOrder:function({commit}){ // 提交订单
+    generateOrder:function({commit},shopping){ // 提交订单
+      console.log("传的参数",shopping)
       http
       .post("user/placeOrder",{
         "deskNum":"1",	//桌号
-        "foodOrders": [	//菜品列表
-          {
-            "foodId":4,	//菜品id
-            "foodNum":1	//菜品数量
-          },
-          {
-            "foodId":3,
-            "foodNum":1
-          }
-        ],
-        "orderRemark":"123",	//备注
+        "foodOrders": shopping,
+        "orderRemark":"新订单",
         "storeId": "1"	//店铺
       })
       .then((res) => {
@@ -137,10 +179,11 @@ export default new Vuex.Store({
         console.log(err)
       })             
     },
-    cancelOrder:function(id){ //取消订单{commit},
+    cancelOrder:function(){ //取消订单{commit},
+      console.log("调用时的参数",arguments[1])
       http
       .post("/user/cancleOrder",{
-        "orderNum":`${id}`
+        "orderNum":arguments[1]
       })
       .then((res) => {
         console.log("订单取消成功",res.data)
@@ -150,17 +193,17 @@ export default new Vuex.Store({
         console.log(err)
       })  
     },
-    paymentOrder:function({commit},orderNum,name1,orderPrice,message){ //支付接口
+    paymentOrder:function({commit},obj){ //支付接口 name1,,message
       http
       .post("/alipay",{
-        "out_trade_no":`${orderNum}`,	//订单编号
-        "subject":`${name1}`,			//订单名称
-        "total_amount":"30",		//金额
-        "body":`${message}`			//描述
+        "out_trade_no":String(obj.orderNum),	//订单编号
+        "subject":`新订单`,			//订单名称
+        "total_amount":String(obj.orderPrice),		//金额
+        "body":"描述"			//描述
       })
       .then((res) => {
-        console.log("支付接口",res.data)
-        console.log("得到了返回的字符串",res.data.data);
+        console.log("支付的参数000",obj)
+        console.log("支付接口调用了，得到了返回的字符串",res.data);
         commit('getstr',res.data.data) 
         router.replace('/PayShow')
       })
